@@ -11,7 +11,7 @@ A beautiful React web app with a Luma-inspired launch experience, featuring smoo
 - 📱 **Progressive Web App** - Installable on any device, works offline
 - 💾 **Database Ready** - SQLite with Prisma ORM
 - 🚀 **Easy Deployment** - One-click Vercel deployment
-- 📲 **Mobile Testing** - Built-in ngrok tunnel for quick phone testing
+- 📲 **Mobile Testing** - LocalTunnel for quick phone testing (no account needed!)
 
 ## Tech Stack
 
@@ -22,7 +22,7 @@ A beautiful React web app with a Luma-inspired launch experience, featuring smoo
 - **PWA**: Service Worker + Web App Manifest
 - **Package Manager**: pnpm
 - **Deployment**: Vercel
-- **Mobile Testing**: ngrok Reverse Proxy
+- **Mobile Testing**: LocalTunnel (no account needed!)
 
 ## Getting Started
 
@@ -58,12 +58,11 @@ This app is a fully functional PWA that can be installed on any device:
 
 The app will work offline using the service worker cache!
 
-### Mobile Testing with ngrok
+### Mobile Testing with LocalTunnel
 
-Test your PWA on your phone without deploying to Vercel:
+Test your PWA on your phone without deploying to Vercel (no account required!):
 
 **Prerequisites:**
-- Install [ngrok](https://ngrok.com/download) (free account required)
 - Have the dev server running: `pnpm dev`
 
 **Quick Start:**
@@ -76,11 +75,12 @@ Test your PWA on your phone without deploying to Vercel:
 scripts\ngrok-tunnel.bat
 
 # Or manually
-ngrok http 3000
+npm install -g localtunnel  # (one time)
+lt --port 3000
 ```
 
 Then:
-1. Copy the `https://...ngrok-free.app` URL
+1. Copy the `https://...loca.lt` URL from the terminal
 2. Open it on your phone
 3. Install as PWA
 4. Test the animations and features!

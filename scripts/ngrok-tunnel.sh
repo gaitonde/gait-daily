@@ -1,44 +1,48 @@
 #!/bin/bash
 
-# Gait Daily - ngrok Reverse Proxy Setup
+# Gait Daily - LocalTunnel Reverse Proxy Setup
 # This script creates a public tunnel to your local development server
-# so you can test on your phone
+# so you can test on your phone (no account required!)
 
-echo "🚀 Gait Daily - ngrok Mobile Testing Setup"
-echo "=========================================="
+echo "🚀 Gait Daily - Mobile Testing with LocalTunnel"
+echo "=============================================="
 echo ""
 
-# Check if ngrok is installed
-if ! command -v ngrok &> /dev/null; then
-    echo "❌ ngrok is not installed."
+# Check if localtunnel is installed
+if ! command -v lt &> /dev/null; then
+    echo "📦 LocalTunnel is not installed yet."
     echo ""
-    echo "Install ngrok from: https://ngrok.com/download"
+    echo "Installing LocalTunnel globally..."
+    npm install -g localtunnel
     echo ""
-    echo "macOS with Homebrew:"
-    echo "  brew install ngrok"
-    echo ""
-    echo "Or download directly from: https://ngrok.com/download"
-    exit 1
+    if ! command -v lt &> /dev/null; then
+        echo "❌ Installation failed. Please try:"
+        echo "   npm install -g localtunnel"
+        exit 1
+    fi
 fi
 
+echo "✅ LocalTunnel is ready!"
+echo ""
 echo "ℹ️  Make sure your dev server is running:"
 echo "   pnpm dev"
 echo ""
-echo "Starting ngrok tunnel to localhost:3000..."
+echo "Starting LocalTunnel to localhost:3000..."
 echo ""
 
 # Check if PORT is specified, otherwise default to 3000
 PORT=${1:-3000}
 
-# Start ngrok
-ngrok http $PORT
+# Start localtunnel
+lt --port $PORT
 
 echo ""
 echo "✅ Tunnel is ready!"
 echo ""
 echo "📱 To test on your phone:"
-echo "   1. Copy the forwarding URL above (https://xxxx-xx-xxx-xx-x.ngrok-free.app)"
+echo "   1. Copy the URL shown above (https://xxxx-xxxx-xx.loca.lt)"
 echo "   2. Open it in your phone's browser"
-echo "   3. Install as PWA (look for 'Install' or '+' button)"
+echo "   3. Watch the animation!"
+echo "   4. Install as PWA (look for 'Install' or '+' button)"
 echo ""
 echo "Press Ctrl+C to stop the tunnel"

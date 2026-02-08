@@ -1,12 +1,13 @@
 # Mobile Testing Guide - Gait Daily PWA
 
-Quick reference for testing the app on your phone with ngrok.
+Quick reference for testing the app on your phone with LocalTunnel (no account required!).
 
 ## Prerequisites
 
-1. **ngrok** - Download from https://ngrok.com/download
-   - Free account required
-   - Sign up at: https://ngrok.com
+1. **LocalTunnel** - Installed via npm
+   - No account needed
+   - Completely free
+   - Auto-installs if missing
 
 ## Quick Start (5 minutes)
 
@@ -21,7 +22,7 @@ You should see:
 - Local:        http://localhost:3000
 ```
 
-### Step 2: Launch ngrok Tunnel
+### Step 2: Launch LocalTunnel Tunnel
 In a **new terminal window**:
 
 **macOS/Linux:**
@@ -36,22 +37,19 @@ scripts\ngrok-tunnel.bat
 
 **Manual (any OS):**
 ```bash
-ngrok http 3000
+npm install -g localtunnel  # (one time only)
+lt --port 3000
 ```
 
 You should see something like:
 ```
-Session Status        online
-Web Interface         http://127.0.0.1:4040
-Forwarding            https://abc123-45-67-890.ngrok-free.app -> http://localhost:3000
+your url is: https://blue-panda-123.loca.lt
 ```
 
 ### Step 3: Test on Phone
 
-1. **Copy the HTTPS URL** (e.g., `https://abc123-45-67-890.ngrok-free.app`)
-2. **Open on your phone** - Either:
-   - Scan QR code shown in ngrok terminal
-   - Type the URL in your phone's browser
+1. **Copy the HTTPS URL** (e.g., `https://blue-panda-123.loca.lt`)
+2. **Open on your phone** - Type the URL in your phone's browser
 3. **Watch the animation** - 3-second splash with morphing icon
 4. **Install as PWA**:
    - **Android**: Wait for "Install" prompt at bottom, tap it
@@ -83,20 +81,20 @@ Forwarding            https://abc123-45-67-890.ngrok-free.app -> http://localhos
 
 ## Troubleshooting
 
-### ngrok Command Not Found
+### LocalTunnel Command Not Found
 ```bash
-# Install ngrok
-brew install ngrok  # macOS
-# or download from https://ngrok.com/download
+# Install LocalTunnel (one time)
+npm install -g localtunnel
 
 # Verify installation
-ngrok --version
+lt --version
 ```
 
 ### Tunnel Connection Fails
 - Make sure `pnpm dev` is running on localhost:3000
 - Check that port 3000 is not blocked by firewall
-- Try restarting both dev server and ngrok
+- Try restarting both dev server and LocalTunnel
+- Make sure npm is installed: `npm --version`
 
 ### PWA Won't Install
 - Make sure you're using HTTPS (ngrok provides this)
@@ -136,17 +134,18 @@ ngrok --version
 5. **Don't rotate screen** - During animation, after is fine
 6. **Test on multiple devices** - iPhone, Android, tablet
 
-## Common ngrok URLs
+## LocalTunnel URL Format
 
-Each time you restart ngrok, you get a new URL. Examples:
-- `https://abc123-45-67-890.ngrok-free.app`
-- `https://xyz789-01-23-456.ngrok-free.app`
+Each time you restart LocalTunnel, you get a new URL. Examples:
+- `https://blue-panda-123.loca.lt`
+- `https://green-tiger-456.loca.lt`
 
-**Free plan limits:**
-- URL changes on restart
-- 2-hour session limit
-- 1GB/month bandwidth
-- 40 connections/minute
+**LocalTunnel features:**
+- ✅ No account required
+- ✅ No rate limits
+- ✅ No time limits
+- ✅ Unlimited bandwidth
+- ✅ URL changes on restart (that's fine!)
 
 ## File Structure
 

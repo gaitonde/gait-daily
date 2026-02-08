@@ -243,13 +243,12 @@ The service worker uses a **network-first strategy**:
 - **iOS**: Users tap Share → Add to Home Screen
 - **Android**: Browser shows install banner automatically
 
-## Mobile Testing with ngrok
+## Mobile Testing with LocalTunnel
 
 ### Quick Start
 
-1. Install ngrok: https://ngrok.com/download
-2. Start dev server: `pnpm dev`
-3. Run tunnel script:
+1. Start dev server: `pnpm dev`
+2. Run tunnel script:
    ```bash
    # macOS/Linux
    ./scripts/ngrok-tunnel.sh
@@ -258,32 +257,37 @@ The service worker uses a **network-first strategy**:
    scripts\ngrok-tunnel.bat
 
    # Or manually
-   ngrok http 3000
+   npm install -g localtunnel  # (one time)
+   lt --port 3000
    ```
 
 ### What Happens
 
-- ngrok creates a public HTTPS URL that tunnels to localhost:3000
-- Open the URL on your phone
+- LocalTunnel creates a public HTTPS URL that tunnels to localhost:3000
+- Open the URL on your phone (e.g., https://blue-panda-123.loca.lt)
 - Install the app as PWA
 - Test animations and functionality
 - Changes in dev reload in real-time on phone
 
 ### Benefits
 
-- Test on actual device without deployment
-- Debug responsive design issues
-- Test PWA install behavior
-- Test offline functionality
-- Real-time reloads
+- ✅ Test on actual device without deployment
+- ✅ No account required
+- ✅ No rate limits or time limits
+- ✅ No signup/verification needed
+- ✅ Debug responsive design issues
+- ✅ Test PWA install behavior
+- ✅ Test offline functionality
+- ✅ Real-time reloads
 
-### ngrok Limits (Free Tier)
+### LocalTunnel Features
 
-- Session duration: 2 hours
-- Bandwidth: 1GB/month
-- URLs change each restart
-
-For continuous testing, upgrade to paid plan or use paid alternative (Cloudflare Tunnel).
+- No account needed
+- Unlimited bandwidth
+- Unlimited session duration
+- Unlimited connections/minute
+- URLs change each restart (no problem!)
+- Works great for development and testing
 
 ## Performance Notes
 
