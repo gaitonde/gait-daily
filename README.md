@@ -187,4 +187,3 @@ To migrate from SQLite to Vercel Postgres:
 ## License
 
 MIT License - feel free to use this project for your own purposes.
-
