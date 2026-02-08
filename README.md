@@ -4,13 +4,14 @@ A beautiful React web app with a Luma-inspired launch experience, featuring smoo
 
 ## Features
 
-- 🎨 **Beautiful Launch Experience** - Animated splash screen with emanating icon effect
+- 🎨 **Beautiful Launch Experience** - Animated splash screen with icon morph/fade effect
 - ✨ **Smooth Animations** - Powered by Framer Motion with spring physics
 - 🌙 **Dark Theme** - Modern, eye-friendly dark interface
 - ⚡ **Built with Next.js** - Optimized for performance and Vercel deployment
-- 📱 **Fully Responsive** - Works perfectly on all devices
+- 📱 **Progressive Web App** - Installable on any device, works offline
 - 💾 **Database Ready** - SQLite with Prisma ORM
 - 🚀 **Easy Deployment** - One-click Vercel deployment
+- 📲 **Mobile Testing** - Built-in ngrok tunnel for quick phone testing
 
 ## Tech Stack
 
@@ -18,8 +19,10 @@ A beautiful React web app with a Luma-inspired launch experience, featuring smoo
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
 - **Database**: SQLite + Prisma ORM
+- **PWA**: Service Worker + Web App Manifest
 - **Package Manager**: pnpm
 - **Deployment**: Vercel
+- **Mobile Testing**: ngrok Reverse Proxy
 
 ## Getting Started
 
@@ -37,6 +40,50 @@ pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+
+### Progressive Web App (PWA)
+
+This app is a fully functional PWA that can be installed on any device:
+
+**Desktop Installation:**
+1. Visit `http://localhost:3000`
+2. Click the install button in the address bar (if available)
+3. Or use browser menu → "Install app"
+
+**Mobile Installation:**
+1. Open the app in your phone's browser
+2. Tap the menu button (three dots or share icon)
+3. Tap "Install app" or "Add to Home Screen"
+4. Tap "Install"
+
+The app will work offline using the service worker cache!
+
+### Mobile Testing with ngrok
+
+Test your PWA on your phone without deploying to Vercel:
+
+**Prerequisites:**
+- Install [ngrok](https://ngrok.com/download) (free account required)
+- Have the dev server running: `pnpm dev`
+
+**Quick Start:**
+
+```bash
+# macOS/Linux
+./scripts/ngrok-tunnel.sh
+
+# Windows
+scripts\ngrok-tunnel.bat
+
+# Or manually
+ngrok http 3000
+```
+
+Then:
+1. Copy the `https://...ngrok-free.app` URL
+2. Open it on your phone
+3. Install as PWA
+4. Test the animations and features!
 
 ### Development Commands
 
@@ -69,12 +116,13 @@ gait-daily/
 
 ## Animation Timeline
 
-The splash screen animation runs for 1.5 seconds:
+The splash screen animation runs for 3 seconds with a beautiful morph/fade effect:
 
-1. **0-600ms**: Icon emanates outward with scale and glow effect
-2. **600-1000ms**: Splash screen fades out
-3. **800-1300ms**: Menu slides up from bottom
-4. **1500ms+**: Main content fully visible
+1. **0-1000ms**: Blank black screen (anticipation)
+2. **1000-1500ms**: Icon fades in and scales up (from 30% to 100%)
+3. **1500-2500ms**: Icon stays visible with glow effects
+4. **2500-3000ms**: Icon fades out and scales down as splash screen exits
+5. **3000ms+**: Menu slides up and main content becomes visible
 
 ## Customization
 

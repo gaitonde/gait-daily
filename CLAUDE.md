@@ -8,17 +8,19 @@ Gait Daily is a modern React web app with a Luma-inspired launch experience. It 
 
 ### Client-Side Rendering (CSR) with Animations
 
-The app uses a two-phase animation system:
+The app uses a two-phase animation system with a sophisticated 3-second splash sequence:
 
-1. **Splash Screen Phase** (0-1500ms)
-   - `SplashScreen.tsx` renders a full-screen black overlay with animated icon
-   - Icon uses Framer Motion for scale and opacity animations
-   - After 1500ms, component unmounts and calls `onComplete()` callback
+1. **Splash Screen Phase** (0-3000ms)
+   - Blank black screen for 1 second (anticipation)
+   - Icon morphs in (fades + scales from 30% to 100%) over 500ms
+   - Icon stays visible for 1 second
+   - Icon morphs out (fades + scales down to 30%) over 500ms
+   - Splash screen exits and calls `onComplete()` callback
 
-2. **Menu & Content Phase** (800ms+)
+2. **Menu & Content Phase** (2500ms+)
    - `SlideUpMenu.tsx` slides up from bottom with spring animation
-   - Overlaps with splash screen fade-out for smooth transition
-   - Main content becomes visible once splash is complete
+   - Overlaps with splash screen exit for seamless transition
+   - Main content becomes fully visible after splash completes
 
 ### State Management
 
@@ -26,20 +28,33 @@ The animation orchestration happens in `layout-client.tsx`:
 
 ```tsx
 - showSplash: boolean - Controls splash screen visibility
+- showIcon: boolean - Controls icon fade-in timing (delayed 1s)
 - showMenu: boolean - Controls menu visibility
-- handleSplashComplete() - Callback that triggers at 1500ms
+- useEffect(() => {
+    // Icon appears after 1s
+    const iconTimer = setTimeout(() => setShowIcon(true), 1000);
+    // Everything completes at 3s
+    const completeTimer = setTimeout(() => setIsVisible(false), 3000);
+  }, [])
 ```
 
-No external state management library needed for this simple flow.
+**Key Features:**
+- Service Worker registration for PWA support
+- Two-phase icon display (fade in/out with scale)
+- Nested `AnimatePresence` for proper cleanup
 
 ## Key Components
 
 ### SplashScreen.tsx
 - Full-screen overlay with fixed z-index: 50
-- Animated icon center-positioned
-- Uses Framer Motion's `motion.div` and `AnimatePresence`
-- Exit animation: opacity fade over 0.4s with 0.6s delay
-- Three visual layers: main icon, glow rings
+- Two-phase timing: blank screen (1s) then icon appears
+- Icon morph/fade animation:
+  - Fade in + scale from 30% to 100% over 500ms
+  - Stay visible for 1 second with glow effects
+  - Fade out + scale down to 30% over 500ms
+- Uses Framer Motion's nested `AnimatePresence` for proper sequencing
+- Three visual layers: main icon, glow rings (both animate together)
+- Exit animation: opacity fade with exit scale transform
 
 ### SlideUpMenu.tsx
 - Bottom-fixed container with z-index: 40
@@ -169,6 +184,106 @@ For Vercel Postgres:
 ```
 DATABASE_URL=postgresql://user:password@host/database
 ```
+
+## Progressive Web App (PWA) Setup
+
+This app is configured as a full PWA with the following features:
+
+### PWA Files
+
+- **`public/manifest.json`** - Web app manifest with app info, icons, and configuration
+- **`public/sw.js`** - Service worker for offline support and caching
+- **`app/api/icon/route.ts`** - Dynamic icon generation endpoint
+
+### PWA Metadata
+
+Added to `app/layout.tsx`:
+
+```tsx
+export const metadata: Metadata = {
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
+  icons: {
+    icon: [{ url: "/api/icon?size=192" }, ...],
+    apple: [{ url: "/apple-icon-180.png" }, ...],
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover", // For notch support
+};
+```
+
+### Service Worker Registration
+
+In `layout-client.tsx`:
+
+```tsx
+useEffect(() => {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
+  }
+}, []);
+```
+
+The service worker uses a **network-first strategy**:
+1. Try to fetch from network
+2. If successful, cache the response
+3. If offline, serve from cache
+4. Fallback to offline page if neither available
+
+### Installation Prompts
+
+- **Desktop**: Browser shows install button in address bar
+- **iOS**: Users tap Share → Add to Home Screen
+- **Android**: Browser shows install banner automatically
+
+## Mobile Testing with ngrok
+
+### Quick Start
+
+1. Install ngrok: https://ngrok.com/download
+2. Start dev server: `pnpm dev`
+3. Run tunnel script:
+   ```bash
+   # macOS/Linux
+   ./scripts/ngrok-tunnel.sh
+
+   # Windows
+   scripts\ngrok-tunnel.bat
+
+   # Or manually
+   ngrok http 3000
+   ```
+
+### What Happens
+
+- ngrok creates a public HTTPS URL that tunnels to localhost:3000
+- Open the URL on your phone
+- Install the app as PWA
+- Test animations and functionality
+- Changes in dev reload in real-time on phone
+
+### Benefits
+
+- Test on actual device without deployment
+- Debug responsive design issues
+- Test PWA install behavior
+- Test offline functionality
+- Real-time reloads
+
+### ngrok Limits (Free Tier)
+
+- Session duration: 2 hours
+- Bandwidth: 1GB/month
+- URLs change each restart
+
+For continuous testing, upgrade to paid plan or use paid alternative (Cloudflare Tunnel).
 
 ## Performance Notes
 

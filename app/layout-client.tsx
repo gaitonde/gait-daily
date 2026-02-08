@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SplashScreen from "./components/SplashScreen";
 import SlideUpMenu from "./components/SlideUpMenu";
 
@@ -11,6 +11,20 @@ export default function RootLayoutClient({
 }) {
   const [showSplash, setShowSplash] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
+
+  useEffect(() => {
+    // Register service worker for PWA support
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js", { scope: "/" })
+        .then((registration) => {
+          console.log("Service Worker registered:", registration);
+        })
+        .catch((error) => {
+          console.log("Service Worker registration failed:", error);
+        });
+    }
+  }, []);
 
   const handleSplashComplete = () => {
     setShowSplash(false);
